@@ -23,6 +23,7 @@ PROGRAM NACA456                                                 ! naca456.f90
 ! 22Dec01  0.92  RLC   More rearrangement of output
 !  4Jan02  1.0   RLC   Final cleanup for release of PDAS 7
 ! 07Nov10  1.1   RLC   Fixed typo in GetRk1
+!  1Jul16  1.11  DCS   Change program to accept command line argument for the input file
 
 IMPLICIT NONE
 
@@ -180,7 +181,9 @@ USE NACAauxilary
   INTEGER:: errCode
   REAL:: leIndex = 6.0   ! leading-edge index (4-digit modified)
   CHARACTER(LEN=80):: name = ' '   ! title desired on output
-  INTEGER:: nTable = 1   ! size of xTable (only used if denCode=0 )
+  ! INTEGER:: nTable = 1   ! size of xTable (only used if denCode=0 )
+  ! mod by DCS 
+  INTEGER:: nTable = 66   ! size of xTable (only used if denCode=0 )
   INTEGER:: nupper, nlower
   REAL,PARAMETER:: PRESET = -1E20
   CHARACTER(LEN=3):: profile = '4'   ! NACA airfoil family 
@@ -253,6 +256,7 @@ USE NACAauxilary
   WRITE(DBG,'(T2,A)') name
   
   IF (denCode == 0) THEN
+    WRITE(DBG,*) nTable
     nTable=CountInputArray(PRESET, xTable)
   ELSE
     CALL LoadX(denCode,nTable,xTable)   ! sets nTable and xTable
@@ -377,6 +381,8 @@ USE NACAauxilary
   CALL PrintArraysNumbered(OUT, xupper(1:nupper),yupper(1:nupper), &
                                 xlower(1:nlower),ylower(1:nlower))
 
+  WRITE(DBG,*) 'Danny'
+  WRITE(DBG,*) nTable
   ALLOCATE(yu(nTable),yl(nTable), yup(nTable),ylp(nTable))
   CALL InterpolateUpperAndLower(xupper,yupper, xlower,ylower, &
     x,yu,yl,yup,ylp)
@@ -501,6 +507,15 @@ SUBROUTINE Welcome()
   INTEGER:: errCode
   CHARACTER(LEN=132):: fileName
   CHARACTER(LEN=*),PARAMETER:: GREETING = "COORDINATES OF NACA AIRFOILS"
+
+  !Read input from the command line
+  CHARACTER(LEN=100) :: option1 
+  !Grab the first command line argument and store it in the variable 'option1' 
+  CALL GETARG(1,option1)   
+  write(*,*) "Variable option1 = ", trim(adjustl(option1))
+  write(*,*) "filename = ", trim(adjustl(option1))
+  filename = trim(adjustl(option1))
+
 !-------------------------------------------------------------------------------
   dateTimeStr=GetDateTimeStr()
 
@@ -508,8 +523,8 @@ SUBROUTINE Welcome()
   WRITE(*,*) "Program naca456, version "//VERSION
   WRITE(*,*) AUTHOR
   DO
-    WRITE(*,*) "Enter the name of the input file:"
-    READ(*,'(A)',IOSTAT=errCode) fileName
+    ! WRITE(*,*) "Enter the name of the input file:"
+    ! READ(*,'(A)',IOSTAT=errCode) fileName
     IF (Len_Trim(fileName)==0) STOP   ! user gives up
     OPEN(UNIT=IN, FILE=fileName, STATUS='OLD', &
       IOSTAT=errCode, ACTION='READ', POSITION='REWIND')
@@ -529,17 +544,20 @@ SUBROUTINE Welcome()
   INQUIRE(UNIT=IN, NAME=fileName)
   WRITE(*,*) "Reading from "//Trim(fileName)
 
-  OPEN(UNIT=DBG, FILE='naca.dbg', STATUS='REPLACE', ACTION='WRITE')
+  ! OPEN(UNIT=DBG, FILE='naca.dbg', STATUS='REPLACE', ACTION='WRITE')
+  OPEN(UNIT=DBG, FILE=Trim(fileName)//'.dbg', STATUS='REPLACE', ACTION='WRITE')
   WRITE(DBG,*) GREETING
   WRITE(DBG,*) "Created by naca456, version "//VERSION//" on "//dateTimeStr
   WRITE(DBG,*) AUTHOR
 
-  OPEN(UNIT=OUT, FILE='naca.out', STATUS='REPLACE', ACTION='WRITE')
+  ! OPEN(UNIT=OUT, FILE='naca.out', STATUS='REPLACE', ACTION='WRITE')
+  OPEN(UNIT=OUT, FILE=Trim(fileName)//'.out', STATUS='REPLACE', ACTION='WRITE')
   WRITE(OUT,*) GREETING
   WRITE(OUT,*) "Created by naca456, version "//VERSION//" on "//dateTimeStr
   WRITE(OUT,*) AUTHOR
 
-  OPEN(UNIT=GNU, FILE='naca.gnu', STATUS='REPLACE', ACTION='WRITE')
+  ! OPEN(UNIT=GNU, FILE='naca.gnu', STATUS='REPLACE', ACTION='WRITE')
+  OPEN(UNIT=GNU, FILE=Trim(fileName)//'.gnu', STATUS='REPLACE', ACTION='WRITE')
 
   RETURN
 END Subroutine Welcome   ! -----------------------------------------------------
