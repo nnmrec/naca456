@@ -1,5 +1,5 @@
  COORDINATES OF NACA AIRFOILS
- Created by naca456, version 1.1 (7 November 2010) on 17:57  1Jul2016
+ Created by naca456, version 1.1 (7 November 2010) on 18:35  1Jul2016
  Ralph L. Carmichael, Public Domain Aeronautical Software
   
  NACA 4415                                                                       
@@ -107,7 +107,7 @@ Two digit mean line,  max camber= 0.040  x of max. camber= 0.400
     97  0.999000  0.001750 -0.175170  0.000133 -0.133111
     98  1.000000  0.001575 -0.175387  0.000000 -0.133333
 
-COORDINATES OF NACA AIRFOILS           17:57  1Jul2016
+COORDINATES OF NACA AIRFOILS           18:35  1Jul2016
  NACA 4415                                                                       
  COMBINED THICKNESS AND CAMBER
          xupper    yupper    xlower    ylower
@@ -210,7 +210,7 @@ COORDINATES OF NACA AIRFOILS           17:57  1Jul2016
     97  0.999231  0.001868  0.998769 -0.001602
     98  1.000208  0.001561  0.999792 -0.001561
 
-COORDINATES OF NACA AIRFOILS           17:57  1Jul2016
+COORDINATES OF NACA AIRFOILS           18:35  1Jul2016
  NACA 4415                                                                       
  INTERPOLATED COORDINATES
             x      yupper   ylower

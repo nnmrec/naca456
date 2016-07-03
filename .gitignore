@@ -1,0 +1,2 @@
+# ignore fortran compiled modules
+*.mod
